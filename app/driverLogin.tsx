@@ -19,18 +19,18 @@ export default function LoginScreen() {
 
         <Pressable style={styles.secondaryButton}>
           <Text style={styles.secondaryButtonText} onPress={()=>{
-            router.push('/signUp')
+            router.push('/driverSignUp')
           }}>Sign up instead</Text>
         </Pressable>
         <Pressable style={styles.secondaryButton}>
           <Text style={styles.secondaryButtonText} onPress={()=>{
-            router.push('/driverLogin')
-          }}>Switch to driver</Text>
+            router.push('/')
+          }}>Switch to customer</Text>
         </Pressable>
 
         <Pressable 
           style={styles.primaryButton} 
-          onPress={() => router.push('/stores')}
+          onPress={() => router.push('/driver')}
         >
           <Text style={styles.primaryButtonText}>Log in</Text>
         </Pressable>
@@ -42,12 +42,12 @@ export default function LoginScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f0f0f0',
+    backgroundColor: '#333333',
     justifyContent: "center",
     padding: 20,
   },
   card: {
-    backgroundColor: 'white',
+    backgroundColor: 'black',
     borderRadius: 15,
     padding: 30,
     height: '80%',
@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 32,
     fontWeight: '600',
-    color: '#1a1a1a',
+    color: '#ffffff',
     marginBottom: 20,
     lineHeight: 40,
   },
@@ -67,10 +67,10 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: '500',
     marginBottom: 8,
-    color: '#1a1a1a',
+    color: '#ffffff',
   },
   input: {
-    backgroundColor: '#eeeeee',
+    backgroundColor: '#333333',
     borderRadius: 8,
     padding: 15,
     fontSize: 16,
@@ -78,21 +78,22 @@ const styles = StyleSheet.create({
   secondaryButton: {
     alignItems: 'center',
     marginVertical: 10,
+    color: 'white',
   },
   secondaryButtonText: {
     fontSize: 16,
-    color: '#000',
+    color: '#f6f6f6',
     fontWeight: '500',
   },
   primaryButton: {
-    backgroundColor: '#1a1a1a',
+    backgroundColor: '#ffffff',
     padding: 18,
     borderRadius: 8,
     alignItems: 'center',
     marginTop: 'auto',
   },
   primaryButtonText: {
-    color: 'white',
+    color: 'black',
     fontSize: 18,
     fontWeight: '600',
   },

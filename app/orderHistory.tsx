@@ -1,5 +1,11 @@
 import { router } from 'expo-router';
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import { useOrders } from '../context/OrderContext';
 
 export default function HistoryScreen() {
@@ -20,10 +26,41 @@ export default function HistoryScreen() {
 
         {orders.map(order => (
           <View key={order.id} style={styles.card}>
-            <Text style={styles.store}>{order.store}</Text>
+            <View style={styles.headerRow}>
+              <Text style={styles.store}>{order.store}</Text>
+              <Text
+                style={[
+                  styles.status,
+                  order.accepted ? styles.accepted : styles.pending,
+                ]}
+              >
+                {order.accepted ? 'Accepted' : 'Pending'}
+              </Text>
+              <Text
+                style={[
+                  styles.status,
+                  order.completed ? styles.accepted : styles.pending,
+                ]}
+              >
+                {order.completed ? 'Delivered' : 'Pending Delivery'}
+              </Text>
+            </View>
+
             <Text style={styles.date}>
               {new Date(order.createdAt).toLocaleString()}
             </Text>
+
+            <View style={styles.addressBlock}>
+              <Text style={styles.addressLabel}>Pickup</Text>
+              <Text style={styles.addressText}>
+                {order.pickupAddress}
+              </Text>
+
+              <Text style={styles.addressLabel}>Drop-off</Text>
+              <Text style={styles.addressText}>
+                {order.dropoffAddress}
+              </Text>
+            </View>
 
             <View style={styles.items}>
               {order.items.map((item, idx) => (
@@ -69,9 +106,7 @@ export default function HistoryScreen() {
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    backgroundColor: '##f0f0f0',
-    padding: 10,
-    justifyContent: 'center',
+    backgroundColor: '#f0f0f0',
   },
 
   container: {
@@ -94,19 +129,53 @@ const styles = StyleSheet.create({
     borderColor: '#e0e0e0',
   },
 
+  headerRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+
   store: {
     fontSize: 16,
     fontWeight: '600',
   },
 
+  status: {
+    fontSize: 12,
+    fontWeight: '600',
+  },
+
+  pending: {
+    color: '#cc8400',
+  },
+
+  accepted: {
+    color: '#1e8e3e',
+  },
+
   date: {
     fontSize: 12,
     color: '#666',
-    marginBottom: 8,
+    marginVertical: 6,
+  },
+
+  addressBlock: {
+    marginTop: 6,
+  },
+
+  addressLabel: {
+    fontSize: 12,
+    color: '#666',
+    marginTop: 6,
+  },
+
+  addressText: {
+    fontSize: 14,
+    fontWeight: '500',
   },
 
   items: {
-    marginTop: 6,
+    marginTop: 10,
   },
 
   item: {
@@ -130,7 +199,6 @@ const styles = StyleSheet.create({
     bottom: 16,
     left: 16,
     right: 16,
-
     flexDirection: 'row',
     backgroundColor: '#222',
     borderRadius: 16,

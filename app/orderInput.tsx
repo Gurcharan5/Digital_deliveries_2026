@@ -1,19 +1,51 @@
 import { router } from 'expo-router';
 import { useState } from 'react';
-import { Pressable, ScrollView, StyleSheet, Text, TextInput, View, } from 'react-native';
+import {
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from 'react-native';
 import { useOrders } from '../context/OrderContext';
 
 export default function OrderScreen() {
   const [item, setItem] = useState('');
   const [items, setItems] = useState<string[]>([]);
+  const [pickupAddress, setPickupAddress] = useState('');
+  const [dropoffAddress, setDropoffAddress] = useState('');
+
   const { addOrder } = useOrders();
+
+  const canSubmit =
+    items.length > 0 &&
+    pickupAddress.trim().length > 0 &&
+    dropoffAddress.trim().length > 0;
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.title}>Order Items</Text>
+      <Text style={styles.title}>Create Order</Text>
 
+      <Text style={styles.label}>Pickup address</Text>
       <TextInput
-        placeholder="Add item"
+        style={styles.input}
+        placeholder="e.g. ASDA, High Street"
+        value={pickupAddress}
+        onChangeText={setPickupAddress}
+      />
+
+      <Text style={styles.label}>Drop-off address</Text>
+      <TextInput
+        style={styles.input}
+        placeholder="e.g. 21 Baker Street"
+        value={dropoffAddress}
+        onChangeText={setDropoffAddress}
+      />
+
+      <Text style={styles.label}>Add item</Text>
+      <TextInput
+        placeholder="Milk, Bread, Eggs…"
         value={item}
         onChangeText={setItem}
         style={styles.input}
@@ -23,7 +55,7 @@ export default function OrderScreen() {
         style={styles.addButton}
         onPress={() => {
           if (!item.trim()) return;
-          setItems([...items, item]);
+          setItems(prev => [...prev, item.trim()]);
           setItem('');
         }}
       >
@@ -41,18 +73,20 @@ export default function OrderScreen() {
       )}
 
       <Pressable
-        style={[
-          styles.confirmButton,
-          items.length === 0 && styles.disabled,
-        ]}
-        disabled={items.length === 0}
+        style={[styles.confirmButton, !canSubmit && styles.disabled]}
+        disabled={!canSubmit}
         onPress={() => {
           addOrder({
             id: Date.now().toString(),
             store: 'ASDA',
             items,
             createdAt: Date.now(),
+            accepted: false,
+            completed: false,
+            pickupAddress,
+            dropoffAddress,
           });
+
           router.push('/orderHistory');
         }}
       >
@@ -61,6 +95,7 @@ export default function OrderScreen() {
     </ScrollView>
   );
 }
+
 
 const styles = StyleSheet.create({
   container: {
@@ -112,4 +147,6 @@ const styles = StyleSheet.create({
   disabled: {
     opacity: 0.4,
   },
+  label: {
+  }
 });
