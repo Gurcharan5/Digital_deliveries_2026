@@ -11,14 +11,6 @@ import { useOrders } from '../context/OrderContext';
 export default function HistoryScreen() {
   const { orders } = useOrders();
 
-  if (orders.length === 0) {
-    return (
-      <View style={styles.emptyContainer}>
-        <Text style={styles.emptyText}>No orders yet</Text>
-      </View>
-    );
-  }
-
   return (
     <View style={styles.screen}>
       <ScrollView contentContainerStyle={styles.container}>
@@ -118,6 +110,7 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontWeight: '600',
     marginBottom: 16,
+    marginTop: 10,
   },
 
   card: {

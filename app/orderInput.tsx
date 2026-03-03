@@ -98,6 +98,14 @@ export default function OrderScreen() {
         </View>
       )}
 
+      <View style={styles.footerContainer}>
+        <Pressable>
+          <Text style={styles.recipeFinderText}>
+            Need recipe ideas? Use Recipe Finder now!
+          </Text>
+        </Pressable>
+      </View>
+
       <Pressable
         style={[styles.confirmButton, !canSubmit && styles.disabled]}
         disabled={!canSubmit}
@@ -127,6 +135,7 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: '#fff',
     flexGrow: 1,
+
   },
   title: {
     fontSize: 22,
@@ -234,5 +243,22 @@ const styles = StyleSheet.create({
   },
   disabled: {
     opacity: 0.4,
+  },
+  footerContainer: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: '#fff',
+    paddingHorizontal: 20,
+    paddingBottom: 30,
+    paddingTop: 10,
+  },
+  recipeFinderText: {
+    fontSize: 14,
+    fontWeight: '500',
+    textAlign: 'center',
+    marginBottom: 60,
+    color: '#000',
   },
 });
