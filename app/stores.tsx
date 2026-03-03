@@ -41,7 +41,7 @@ export default function StoresScreen() {
 
           <TouchableOpacity style={styles.requestButton}>
             <Text style={styles.requestButtonText} onPress={()=>{
-                router.push('/customStore')
+                router.push('/orderInput')
             }}>Request a custom store</Text>
           </TouchableOpacity>
         </ScrollView>

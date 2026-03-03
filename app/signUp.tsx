@@ -1,27 +1,48 @@
 import { router } from 'expo-router';
-import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
+import { Image, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 
 export default function SignUpScreen() {
   return (
     <View style={styles.container}>
       <View style={styles.card}>
-        <Text style={styles.title}>Sign Up</Text>
+        <Image 
+          source={require('../assets/images/Light_logo.png')} 
+          style={styles.logo}
+          resizeMode="contain"
+        />
+
+        <Text style={styles.title}>Register for your account</Text>
 
         <View style={styles.inputContainer}>
           <Text style={styles.label}>Email</Text>
-          <TextInput style={styles.input} />
+          <TextInput style={styles.input} placeholder="Enter your email" />
+        </View>
+
+        <View style={styles.inputContainer}>
+          <Text style={styles.label}>Postcode</Text>
+          <TextInput style={styles.input} placeholder="Enter your postcode" />
         </View>
 
         <View style={styles.inputContainer}>
           <Text style={styles.label}>Password</Text>
-          <TextInput style={styles.input} secureTextEntry />
+          <TextInput style={styles.input} secureTextEntry placeholder="Enter your password" />
+        </View>
+
+        <View style={styles.buttonRow}>
+          <Pressable onPress={() => router.push('/')}>
+            <Text style={styles.secondaryButtonText}>Log in instead</Text>
+          </Pressable>
+          
+          <Pressable onPress={() => router.push('/driverLogin')}>
+            <Text style={styles.driverSwitchText}>Switch to driver</Text>
+          </Pressable>
         </View>
 
         <Pressable 
           style={styles.primaryButton} 
           onPress={() => router.push('/stores')}
         >
-          <Text style={styles.primaryButtonText}>Sign Up</Text>
+          <Text style={styles.primaryButtonText}>Sign up</Text>
         </Pressable>
       </View>
     </View>
@@ -31,49 +52,71 @@ export default function SignUpScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f0f0f0',
+    backgroundColor: '#f5f5f5',
     justifyContent: "center",
     padding: 20,
   },
   card: {
     backgroundColor: 'white',
     borderRadius: 15,
-    padding: 30,
-    height: '80%',
-    justifyContent: 'space-between',
+    padding: 25,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 5,
+  },
+  logo: {
+    width: 300,
+    height: 200,
+    alignSelf: 'center',
+    marginBottom: 20,
   },
   title: {
-    fontSize: 32,
-    fontWeight: '600',
-    color: '#1a1a1a',
-    marginBottom: 20,
-    lineHeight: 40,
+    fontSize: 22,
+    fontWeight: '700',
+    color: '#333',
+    marginBottom: 25,
   },
   inputContainer: {
     marginBottom: 15,
   },
   label: {
-    fontSize: 18,
-    fontWeight: '500',
+    fontSize: 16,
+    fontWeight: '600',
     marginBottom: 8,
-    color: '#1a1a1a',
+    color: '#333',
   },
   input: {
-    backgroundColor: '#eeeeee',
+    backgroundColor: '#f0f0f0',
     borderRadius: 8,
-    padding: 15,
+    padding: 12,
     fontSize: 16,
+  },
+  buttonRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginVertical: 20,
+  },
+  secondaryButtonText: {
+    color: '#333',
+    fontSize: 14,
+    fontWeight: 500,
+  },
+  driverSwitchText: {
+    color: '#ff4500', 
+    fontSize: 14,
+    fontWeight: '500',
   },
   primaryButton: {
     backgroundColor: '#1a1a1a',
-    padding: 18,
+    padding: 16,
     borderRadius: 8,
     alignItems: 'center',
-    marginTop: 'auto',
   },
   primaryButtonText: {
     color: 'white',
-    fontSize: 18,
-    fontWeight: '600',
+    fontSize: 16,
+    fontWeight: '700',
   },
 });

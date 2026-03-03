@@ -1,32 +1,47 @@
 import { router } from 'expo-router';
-import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
+import { Image, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 
-export default function LoginScreen() {
+export default function DriverLoginScreen() {
   return (
     <View style={styles.container}>
       <View style={styles.card}>
-        <Text style={styles.title}>Welcome to{"\n"}Digital Deliveries!</Text>
+  
+        <Image 
+          source={require('../assets/images/Dark_logo.png')} 
+          style={styles.logo}
+          resizeMode="contain"
+        />
+
+        <Text style={styles.title}>Login to your account</Text>
 
         <View style={styles.inputContainer}>
           <Text style={styles.label}>Email</Text>
-          <TextInput style={styles.input} />
+          <TextInput 
+            style={styles.input} 
+            placeholder="Enter your email" 
+            placeholderTextColor="#999" 
+          />
         </View>
 
         <View style={styles.inputContainer}>
           <Text style={styles.label}>Password</Text>
-          <TextInput style={styles.input} secureTextEntry />
+          <TextInput 
+            style={styles.input} 
+            secureTextEntry 
+            placeholder="Enter your password" 
+            placeholderTextColor="#999" 
+          />
         </View>
 
-        <Pressable style={styles.secondaryButton}>
-          <Text style={styles.secondaryButtonText} onPress={()=>{
-            router.push('/driverSignUp')
-          }}>Sign up instead</Text>
-        </Pressable>
-        <Pressable style={styles.secondaryButton}>
-          <Text style={styles.secondaryButtonText} onPress={()=>{
-            router.push('/')
-          }}>Switch to customer</Text>
-        </Pressable>
+        <View style={styles.buttonRow}>
+          <Pressable onPress={() => router.push('/driverSignUp')}>
+            <Text style={styles.secondaryButtonText}>Sign up instead</Text>
+          </Pressable>
+          
+          <Pressable onPress={() => router.push('/')}>
+            <Text style={styles.switchOrderText}>Switch to order</Text>
+          </Pressable>
+        </View>
 
         <Pressable 
           style={styles.primaryButton} 
@@ -42,59 +57,68 @@ export default function LoginScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#333333',
+    backgroundColor: '#000000',
     justifyContent: "center",
     padding: 20,
   },
   card: {
-    backgroundColor: 'black',
+    backgroundColor: '#000000',
     borderRadius: 15,
-    padding: 30,
-    height: '80%',
-    justifyContent: 'space-between',
+    padding: 25,
+    borderWidth: 1,
+    borderColor: '#333',
+  },
+  logo: {
+    width: 300,
+    height: 200,
+    alignSelf: 'center',
+    marginBottom: 20,
   },
   title: {
-    fontSize: 32,
-    fontWeight: '600',
+    fontSize: 22,
+    fontWeight: '700',
     color: '#ffffff',
-    marginBottom: 20,
-    lineHeight: 40,
+    marginBottom: 25,
   },
   inputContainer: {
     marginBottom: 15,
   },
   label: {
-    fontSize: 18,
-    fontWeight: '500',
+    fontSize: 16,
+    fontWeight: '600',
     marginBottom: 8,
     color: '#ffffff',
   },
   input: {
-    backgroundColor: '#333333',
+    backgroundColor: '#e0e0e0',
     borderRadius: 8,
-    padding: 15,
+    padding: 12,
     fontSize: 16,
+    color: '#000',
   },
-  secondaryButton: {
-    alignItems: 'center',
-    marginVertical: 10,
-    color: 'white',
+  buttonRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginVertical: 25,
   },
   secondaryButtonText: {
-    fontSize: 16,
-    color: '#f6f6f6',
+    color: '#ffffff',
+    fontSize: 14,
+  },
+  switchOrderText: {
+    color: '#ff4500',
+    fontSize: 14,
     fontWeight: '500',
   },
   primaryButton: {
     backgroundColor: '#ffffff',
-    padding: 18,
+    padding: 16,
     borderRadius: 8,
     alignItems: 'center',
-    marginTop: 'auto',
   },
   primaryButtonText: {
-    color: 'black',
-    fontSize: 18,
-    fontWeight: '600',
+    color: '#000000',
+    fontSize: 16,
+    fontWeight: '700',
   },
 });

@@ -44,11 +44,11 @@ export default function JobDetailsScreen() {
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    backgroundColor: '#333333',
+    backgroundColor: '#000000',
     padding: 20,
   },
   card:  {
-    backgroundColor: '#000000',
+    backgroundColor: '#ffffff',
     borderRadius: 14,
     padding: 16,
     marginBottom: 16,
@@ -65,19 +65,19 @@ const styles = StyleSheet.create({
   heading: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#aaa',
+    color: '#000000',
     marginTop: 16,
   },
   text: {
     fontSize: 16,
-    color: 'white',
+    color: 'black',
   },
   item: {
-    color: 'white',
+    color: 'black',
     marginVertical: 2,
   },
   completeButton: {
-    backgroundColor: 'white',
+    backgroundColor: 'black',
     paddingVertical: 18,
     borderRadius: 14,
     alignItems: 'center',
@@ -86,6 +86,6 @@ const styles = StyleSheet.create({
   completeText: {
     fontSize: 18,
     fontWeight: '700',
-    color: 'black',
+    color: 'white',
   },
 });

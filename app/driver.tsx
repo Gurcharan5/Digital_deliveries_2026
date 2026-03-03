@@ -50,13 +50,13 @@ export default function DriverScreen() {
 
 const styles = StyleSheet.create({
   background: {
-    backgroundColor: '#333333',
+    backgroundColor: '#000000',
     flex: 1,
   },
   container: {
     padding: 20,
     paddingBottom: 40,
-    backgroundColor: '#333333'
+    backgroundColor: '#000000'
   },
   title: {
     fontSize: 30,
@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
     color: '#9b9999',
   },
   card: {
-    backgroundColor: '#000000',
+    backgroundColor: '#ffffff',
     borderRadius: 14,
     padding: 16,
     marginBottom: 16,
@@ -81,26 +81,26 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '600',
     marginTop: 10,
-    color: 'white',
+    color: 'black',
   },
   text: {
     fontSize: 14,
-    color: '#ffffff',
+    color: '#000000',
   },
   item: {
     fontSize: 14,
     marginVertical: 2,
-    color: 'white',
+    color: 'black',
   },
   acceptButton: {
-    backgroundColor: 'rgb(255, 255, 255)',
+    backgroundColor: 'rgb(0, 0, 0)',
     paddingVertical: 14,
     borderRadius: 12,
     marginTop: 16,
     alignItems: 'center',
   },
   acceptText: {
-    color: '#000000',
+    color: '#ffffff',
     fontSize: 16,
     fontWeight: '600',
   },
