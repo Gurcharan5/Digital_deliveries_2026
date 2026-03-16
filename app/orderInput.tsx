@@ -1,7 +1,7 @@
 import { router } from 'expo-router';
 import { useState } from 'react';
 import {
-  Image, // Added Image
+  Image,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -10,12 +10,7 @@ import {
   View,
 } from 'react-native';
 import { useOrders } from '../context/OrderContext';
-
-const RECOMMENDED_ITEMS = [
-  { id: '1', name: 'Milk', image: require('../assets/images/milk.png') },
-  { id: '2', name: 'Oranges', image: require('../assets/images/orange.jpg') },
-  { id: '3', name: 'Cheese', image: require('../assets/images/cheese.jpg') },
-];
+import { RECOMMENDED_ITEMS } from '../context/RecommendedItems';
 
 export default function OrderScreen() {
   const [item, setItem] = useState('');
@@ -42,7 +37,8 @@ export default function OrderScreen() {
 
       <View style={styles.recommendedContainer}>
         <Text style={styles.sectionTitle}>Recommended items</Text>
-        <View style={styles.itemRow}>
+        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+          <View style={styles.itemRow}>
           {RECOMMENDED_ITEMS.map((recItem) => (
             <Pressable 
               key={recItem.id} 
@@ -53,6 +49,7 @@ export default function OrderScreen() {
             </Pressable>
           ))}
         </View>
+        </ScrollView>
       </View>
 
       <Text style={styles.label}>Pickup address</Text>
@@ -112,7 +109,7 @@ export default function OrderScreen() {
         onPress={() => {
           addOrder({
             id: Date.now().toString(),
-            store: 'ASDA',
+            store: pickupAddress,
             items,
             createdAt: Date.now(),
             accepted: false,

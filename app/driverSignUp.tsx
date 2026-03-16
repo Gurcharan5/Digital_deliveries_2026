@@ -5,7 +5,6 @@ export default function DriverSignUpScreen() {
   return (
     <View style={styles.container}>
       <View style={styles.card}>
-        {/* Step 1: Add the Logo with explicit dimensions */}
         <Image 
           source={require('../assets/images/Dark_logo.png')} 
           style={styles.logo}
@@ -23,7 +22,6 @@ export default function DriverSignUpScreen() {
           />
         </View>
 
-        {/* Step 2: Added Postcode field to match screenshot */}
         <View style={styles.inputContainer}>
           <Text style={styles.label}>Postcode</Text>
           <TextInput 
@@ -43,7 +41,6 @@ export default function DriverSignUpScreen() {
           />
         </View>
 
-        {/* Step 3: Align buttons in a row */}
         <View style={styles.buttonRow}>
           <Pressable onPress={() => router.push('/driverLogin')}>
             <Text style={styles.secondaryButtonText}>Log in instead</Text>

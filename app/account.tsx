@@ -5,6 +5,7 @@ import { Alert, Pressable, StyleSheet, Text, TextInput, TouchableOpacity, View }
 export default function AccountScreen() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [postcode, setPostcode] = useState('');
 
   return (
     <View style={styles.container}>
@@ -28,6 +29,14 @@ export default function AccountScreen() {
         style={styles.input}
         secureTextEntry
       />
+
+      <Text style={styles.label}>Postcode</Text>
+      <TextInput 
+        placeholder='Enter new postcode'
+        value={postcode}
+        onChangeText={setPostcode}
+        style={styles.input}>
+        </TextInput>
 
       <Pressable
         style={styles.primaryButton}
@@ -79,11 +88,11 @@ export default function AccountScreen() {
       
         <Text style={styles.label}>Issue Details</Text>
         <TextInput
-          placeholder="Describe the problem..." // Added state
+          placeholder="Describe the problem..." 
           style={styles.issueInput}
-          multiline={true} // Allows multiple lines
-          numberOfLines={6} // Sets initial height
-          textAlignVertical="top" // Ensures text starts at the top (Android)
+          multiline={true}
+          numberOfLines={6} 
+          textAlignVertical="top" 
           placeholderTextColor="#999"
         />
         <Pressable
@@ -156,7 +165,7 @@ const styles = StyleSheet.create({
     borderColor: '#ddd',
     borderRadius: 10,
     padding: 12,
-    height: 150,
+    height: 100,
     fontSize: 16,
     marginBottom: 16,
   },
