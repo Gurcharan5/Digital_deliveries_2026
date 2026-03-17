@@ -1,11 +1,5 @@
 import { router } from 'expo-router';
-import {
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View, } from 'react-native';
 import { useOrders } from '../context/OrderContext';
 
 export default function HistoryScreen() {
