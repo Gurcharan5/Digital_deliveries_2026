@@ -1,9 +1,15 @@
 import { createContext, ReactNode, useContext, useState } from 'react';
 
+export type OrderItem = {
+  name: string;
+  price: number;
+};
+
 export type Order = {
   id: string;
   store: string;
-  items: string[];
+  items: OrderItem[]; 
+  totalPrice: number;
   createdAt: number;
   accepted: boolean;
   completed: boolean;
@@ -28,15 +34,14 @@ export function OrderProvider({ children }: { children: ReactNode }) {
   };
 
   const completeOrder = (id: string) => {
-  setOrders(prev =>
-    prev.map(order =>
-      order.id === id
-        ? { ...order, completed: true }
-        : order
+    setOrders(prev =>
+      prev.map(order =>
+        order.id === id
+          ? { ...order, completed: true }
+          : order
       )
     );
   };
-
 
   const acceptOrder = (id: string) => {
     setOrders(prev =>
@@ -50,9 +55,8 @@ export function OrderProvider({ children }: { children: ReactNode }) {
 
   return (
     <OrderContext.Provider value={{ orders, addOrder, acceptOrder, completeOrder }}>
-  {children}
-  </OrderContext.Provider>
-
+      {children}
+    </OrderContext.Provider>
   );
 }
 

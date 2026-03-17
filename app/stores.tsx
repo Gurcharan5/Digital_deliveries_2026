@@ -11,10 +11,15 @@ export default function StoresScreen() {
 
           {stores.map(store => (
             <TouchableOpacity
-              key={store.id}
-              style={styles.storeRow}
-              onPress={() => router.push('/orderInput')}
-            >
+                key={store.id}
+                style={styles.storeRow}
+                onPress={() => 
+                  router.push({
+                    pathname: '/orderInput',
+                    params: { selectedStore: store.name } 
+                  })
+                }
+              >
               <View style={styles.logoContainer}>
                 <Image 
                   source={{ uri: store.logo }} 

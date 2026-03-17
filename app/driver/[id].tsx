@@ -1,5 +1,5 @@
 import { router, useLocalSearchParams } from 'expo-router';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useOrders } from '../../context/OrderContext';
 
 export default function JobDetailsScreen() {
@@ -9,34 +9,61 @@ export default function JobDetailsScreen() {
   const order = orders.find(o => o.id === id);
 
   if (!order) {
-    return <Text style={{ color: 'white' }}>Order not found</Text>;
+    return (
+      <View style={styles.screen}>
+        <Text style={{ color: 'white', textAlign: 'center', marginTop: 50 }}>
+          Order not found
+        </Text>
+      </View>
+    );
   }
 
   return (
     <View style={styles.screen}>
       <Text style={styles.title}>Delivery Job</Text>
-      <View style={styles.card}>
-        <Text style={styles.heading}>Pickup</Text>
-        <Text style={styles.text}>{order.pickupAddress}</Text>
+      
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <View style={styles.card}>
+          <View style={styles.statusBadge}>
+            <Text style={styles.statusText}>In Progress</Text>
+          </View>
 
-        <Text style={styles.heading}>Drop-off</Text>
-        <Text style={styles.text}>{order.dropoffAddress}</Text>
+          <Text style={styles.heading}>Pickup Location</Text>
+          <Text style={styles.text}>{order.pickupAddress}</Text>
 
-        <Text style={styles.heading}>Items</Text>
-        {order.items.map((item, i) => (
-            <Text key={i} style={styles.item}>• {item}</Text>
-        ))}
+          <View style={styles.divider} />
 
-        <Pressable
+          <Text style={styles.heading}>Drop-off Location</Text>
+          <Text style={styles.text}>{order.dropoffAddress}</Text>
+
+          <View style={styles.divider} />
+
+          <Text style={styles.heading}>Items to Collect</Text>
+          <View style={styles.itemsBox}>
+            {order.items.map((item, i) => (
+              <View key={i} style={styles.itemRow}>
+                <Text style={styles.itemBullet}>• {item.name}</Text>
+                <Text style={styles.itemPrice}>£{item.price.toFixed(2)}</Text>
+              </View>
+            ))}
+          </View>
+
+          <View style={styles.totalBox}>
+            <Text style={styles.totalLabel}>Total Value</Text>
+            <Text style={styles.totalValue}>£{order.totalPrice.toFixed(2)}</Text>
+          </View>
+
+          <Pressable
             style={styles.completeButton}
             onPress={() => {
-            completeOrder(order.id);
-            router.back();
+              completeOrder(order.id);
+              router.replace('/driver'); 
             }}
-        >
-            <Text style={styles.completeText}>Complete Order</Text>
-        </Pressable>
-      </View>
+          >
+            <Text style={styles.completeText}>Mark as Delivered</Text>
+          </Pressable>
+        </View>
+      </ScrollView>
     </View>
   );
 }
@@ -47,41 +74,98 @@ const styles = StyleSheet.create({
     backgroundColor: '#000000',
     padding: 20,
   },
-  card:  {
-    backgroundColor: '#ffffff',
-    borderRadius: 14,
-    padding: 16,
-    marginBottom: 16,
-    borderWidth: 1,
-    borderColor: '#333333',
-  },
   title: {
-    fontSize: 24,
+    fontSize: 28,
     fontWeight: '700',
     color: 'white',
-    paddingTop: 30,
+    paddingTop: 40,
+    marginBottom: 20,
+  },
+  card: {
+    backgroundColor: '#ffffff',
+    borderRadius: 24,
+    padding: 20,
+    marginBottom: 40,
+  },
+  statusBadge: {
+    alignSelf: 'flex-start',
+    backgroundColor: '#FFF9C4',
+    paddingHorizontal: 12,
+    paddingVertical: 4,
+    borderRadius: 8,
     marginBottom: 10,
   },
+  statusText: {
+    color: '#FBC02D',
+    fontSize: 12,
+    fontWeight: '700',
+    textTransform: 'uppercase',
+  },
   heading: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#000000',
-    marginTop: 16,
+    fontSize: 12,
+    fontWeight: '700',
+    color: '#999',
+    textTransform: 'uppercase',
+    letterSpacing: 1,
+    marginTop: 15,
   },
   text: {
-    fontSize: 16,
-    color: 'black',
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#000',
+    marginTop: 4,
   },
-  item: {
-    color: 'black',
-    marginVertical: 2,
+  divider: {
+    height: 1,
+    backgroundColor: '#eee',
+    marginVertical: 15,
+  },
+  itemsBox: {
+    marginTop: 10,
+    padding: 15,
+    backgroundColor: '#f9f9f9',
+    borderRadius: 12,
+  },
+  itemRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginVertical: 4,
+  },
+  itemBullet: {
+    fontSize: 15,
+    color: '#333',
+  },
+  itemPrice: {
+    fontSize: 15,
+    color: '#888',
+  },
+  totalBox: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 20,
+    paddingHorizontal: 5,
+  },
+  totalLabel: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#000',
+  },
+  totalValue: {
+    fontSize: 20,
+    fontWeight: '800',
+    color: '#000',
   },
   completeButton: {
-    backgroundColor: 'black',
+    backgroundColor: '#000',
     paddingVertical: 18,
-    borderRadius: 14,
+    borderRadius: 16,
     alignItems: 'center',
     marginTop: 30,
+    
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 5,
   },
   completeText: {
     fontSize: 18,

@@ -1,30 +1,32 @@
-import { router } from 'expo-router';
-import { useState } from 'react';
-import {
-  Image,
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-} from 'react-native';
+import { router, useLocalSearchParams } from 'expo-router';
+import { useEffect, useState } from 'react';
+import { Image, Pressable, ScrollView, StyleSheet, Text, TextInput, View, } from 'react-native';
 import { useOrders } from '../context/OrderContext';
 import { RECOMMENDED_ITEMS } from '../context/RecommendedItems';
 
 export default function OrderScreen() {
+  const { selectedStore } = useLocalSearchParams<{ selectedStore: string }>();
+  
   const [item, setItem] = useState('');
-  const [items, setItems] = useState<string[]>([]);
+  const [items, setItems] = useState<{ name: string; price: number }[]>([]);
   const [pickupAddress, setPickupAddress] = useState('');
   const [dropoffAddress, setDropoffAddress] = useState('');
 
   const { addOrder } = useOrders();
 
-  const handleAddItem = (itemName: string) => {
+  useEffect(() => {
+    if (selectedStore) {
+      setPickupAddress(selectedStore);
+    }
+  }, [selectedStore]);
+
+  const handleAddItem = (itemName: string, itemPrice: number = 2.00) => {
     if (!itemName.trim()) return;
-    setItems(prev => [...prev, itemName.trim()]);
+    setItems(prev => [...prev, { name: itemName.trim(), price: itemPrice }]);
     setItem('');
   };
+
+  const totalCost = items.reduce((sum, current) => sum + current.price, 0);
 
   const canSubmit =
     items.length > 0 &&
@@ -39,16 +41,17 @@ export default function OrderScreen() {
         <Text style={styles.sectionTitle}>Recommended items</Text>
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
           <View style={styles.itemRow}>
-          {RECOMMENDED_ITEMS.map((recItem) => (
-            <Pressable 
-              key={recItem.id} 
-              style={styles.recItemBox}
-              onPress={() => handleAddItem(recItem.name)}
-            >
-              <Image source={recItem.image} style={styles.recImage} resizeMode="contain" />
-            </Pressable>
-          ))}
-        </View>
+            {RECOMMENDED_ITEMS.map((recItem) => (
+              <Pressable 
+                key={recItem.id} 
+                style={styles.recItemBox}
+                onPress={() => handleAddItem(recItem.name, recItem.price)}
+              >
+                <Image source={recItem.image} style={styles.recImage} resizeMode="contain" />
+                <Text style={styles.recPriceLabel}>£{recItem.price.toFixed(2)}</Text>
+              </Pressable>
+            ))}
+          </View>
         </ScrollView>
       </View>
 
@@ -88,10 +91,16 @@ export default function OrderScreen() {
         <View style={styles.list}>
           {items.map((i, idx) => (
             <View key={idx} style={styles.listItemRow}>
-              <Text style={styles.listItemText}>{i}</Text>
+              <Text style={styles.listItemText}>{i.name}</Text>
               <View style={styles.dottedLine} />
+              <Text style={styles.itemPriceText}>£{i.price.toFixed(2)}</Text>
             </View>
           ))}
+          
+          <View style={styles.totalRow}>
+            <Text style={styles.totalLabel}>Total Estimate</Text>
+            <Text style={styles.totalAmount}>£{totalCost.toFixed(2)}</Text>
+          </View>
         </View>
       )}
 
@@ -104,25 +113,23 @@ export default function OrderScreen() {
       </View>
 
       <Pressable
-        style={[styles.confirmButton, !canSubmit && styles.disabled]}
-        disabled={!canSubmit}
-        onPress={() => {
-          addOrder({
-            id: Date.now().toString(),
-            store: pickupAddress,
-            items,
-            createdAt: Date.now(),
-            accepted: false,
-            completed: false,
-            pickupAddress,
-            dropoffAddress,
-          });
-
-          router.push('/orderHistory');
-        }}
-      >
-        <Text style={styles.confirmButtonText}>Confirm order</Text>
-      </Pressable>
+  style={[styles.confirmButton, !canSubmit && styles.disabled]}
+  disabled={!canSubmit}
+  onPress={() => {
+    router.push({
+      pathname: '/paymentScreen',
+      params: {
+        store: pickupAddress,
+        pickup: pickupAddress,
+        dropoff: dropoffAddress,
+        total: totalCost.toString(),
+        items: JSON.stringify(items), 
+      },
+    });
+  }}
+>
+  <Text style={styles.confirmButtonText}>Confirm order</Text>
+</Pressable>
     </ScrollView>
   );
 }
@@ -132,7 +139,6 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: '#fff',
     flexGrow: 1,
-
   },
   title: {
     fontSize: 22,
@@ -154,8 +160,8 @@ const styles = StyleSheet.create({
     gap: 15,
   },
   recItemBox: {
-    width: 80,
-    height: 80,
+    width: 85,
+    height: 100,
     borderRadius: 15,
     borderWidth: 1,
     borderColor: '#eee',
@@ -163,15 +169,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 10,
     backgroundColor: '#fff',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 2,
   },
   recImage: {
     width: '100%',
-    height: '100%',
+    height: '60%',
+  },
+  recPriceLabel: {
+    fontSize: 12,
+    color: '#666',
+    marginTop: 5,
+    fontWeight: '600'
   },
   label: {
     fontSize: 16,
@@ -218,6 +225,11 @@ const styles = StyleSheet.create({
     color: '#333',
     marginRight: 10,
   },
+  itemPriceText: {
+    fontSize: 16,
+    fontWeight: '500',
+    marginLeft: 10,
+  },
   dottedLine: {
     flex: 1,
     height: 1,
@@ -225,6 +237,23 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#ccc',
     marginTop: 10,
+  },
+  totalRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 20,
+    paddingTop: 15,
+    borderTopWidth: 1,
+    borderTopColor: '#eee',
+  },
+  totalLabel: {
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  totalAmount: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#000',
   },
   confirmButton: {
     backgroundColor: '#1a1a1a',
@@ -242,20 +271,12 @@ const styles = StyleSheet.create({
     opacity: 0.4,
   },
   footerContainer: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    backgroundColor: '#fff',
-    paddingHorizontal: 20,
-    paddingBottom: 30,
-    paddingTop: 10,
+    paddingVertical: 20,
   },
   recipeFinderText: {
     fontSize: 14,
     fontWeight: '500',
     textAlign: 'center',
-    marginBottom: 60,
-    color: '#000',
+    color: '#666',
   },
 });

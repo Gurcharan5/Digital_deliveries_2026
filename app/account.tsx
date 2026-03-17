@@ -43,7 +43,7 @@ export default function AccountScreen() {
         onPress={() => {
           Alert.alert(
             'Account Updated',
-            'Your account details have been updated (locally).'
+            'Your account details have been updated.'
           );
         }}
       >
