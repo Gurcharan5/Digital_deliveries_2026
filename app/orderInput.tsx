@@ -1,6 +1,9 @@
+import { FRUIT_ITEMS } from '@/context/FruitItems';
+import { VEG_ITEMS } from '@/context/VegItems';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { Image, Pressable, ScrollView, StyleSheet, Text, TextInput, View, } from 'react-native';
+import { HOUSEHOLD_ITEMS } from '../context/HouseholdItems';
 import { useOrders } from '../context/OrderContext';
 import { RECOMMENDED_ITEMS } from '../context/RecommendedItems';
 
@@ -42,6 +45,60 @@ export default function OrderScreen() {
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
           <View style={styles.itemRow}>
             {RECOMMENDED_ITEMS.map((recItem) => (
+              <Pressable 
+                key={recItem.id} 
+                style={styles.recItemBox}
+                onPress={() => handleAddItem(recItem.name, recItem.price)}
+              >
+                <Image source={recItem.image} style={styles.recImage} resizeMode="contain" />
+                <Text style={styles.recPriceLabel}>£{recItem.price.toFixed(2)}</Text>
+              </Pressable>
+            ))}
+          </View>
+        </ScrollView>
+      </View>
+
+      <View style={styles.recommendedContainer}>
+        <Text style={styles.sectionTitle}>Household items</Text>
+        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+          <View style={styles.itemRow}>
+            {HOUSEHOLD_ITEMS.map((recItem) => (
+              <Pressable 
+                key={recItem.id} 
+                style={styles.recItemBox}
+                onPress={() => handleAddItem(recItem.name, recItem.price)}
+              >
+                <Image source={recItem.image} style={styles.recImage} resizeMode="contain" />
+                <Text style={styles.recPriceLabel}>£{recItem.price.toFixed(2)}</Text>
+              </Pressable>
+            ))}
+          </View>
+        </ScrollView>
+      </View>
+
+      <View style={styles.recommendedContainer}>
+        <Text style={styles.sectionTitle}>Fruit items</Text>
+        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+          <View style={styles.itemRow}>
+            {FRUIT_ITEMS.map((recItem) => (
+              <Pressable 
+                key={recItem.id} 
+                style={styles.recItemBox}
+                onPress={() => handleAddItem(recItem.name, recItem.price)}
+              >
+                <Image source={recItem.image} style={styles.recImage} resizeMode="contain" />
+                <Text style={styles.recPriceLabel}>£{recItem.price.toFixed(2)}</Text>
+              </Pressable>
+            ))}
+          </View>
+        </ScrollView>
+      </View>
+
+      <View style={styles.recommendedContainer}>
+        <Text style={styles.sectionTitle}>Veg items</Text>
+        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+          <View style={styles.itemRow}>
+            {VEG_ITEMS.map((recItem) => (
               <Pressable 
                 key={recItem.id} 
                 style={styles.recItemBox}
