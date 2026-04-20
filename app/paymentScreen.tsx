@@ -1,6 +1,7 @@
 import { router, useLocalSearchParams } from 'expo-router';
 import { useState } from 'react';
 import {
+  ActivityIndicator,
   KeyboardAvoidingView,
   Platform,
   Pressable,
@@ -16,26 +17,34 @@ export default function PaymentScreen() {
   const { addOrder } = useOrders();
   const [isProcessing, setIsProcessing] = useState(false);
 
-  const items = JSON.parse(params.items as string);
-  const total = parseFloat(params.total as string);
+  // Safely parse items and total
+  // We use a fallback empty array string '[]' to prevent JSON.parse(undefined) crashes
+  const items = JSON.parse((params.items as string) || '[]');
+  const total = parseFloat((params.total as string) || (params.amount as string) || '0');
 
   const handlePay = () => {
     setIsProcessing(true);
 
+    // Check if this is a subscription upgrade from the Account page
+    const isSub = params.isSubscription === 'true';
+
     setTimeout(() => {
       addOrder({
         id: Date.now().toString(),
-        store: params.store as string,
+        store: (params.store as string) || 'Digital Store',
         items: items,
         totalPrice: total,
         createdAt: Date.now(),
-        accepted: false,
-        completed: false,
-        pickupAddress: params.pickup as string,
-        dropoffAddress: params.dropoff as string,
+        // Logic: Subscriptions autocomplete, grocery orders stay pending
+        accepted: isSub ? true : false,
+        completed: isSub ? true : false,
+        pickupAddress: (params.pickup as string) || 'N/A',
+        dropoffAddress: (params.dropoff as string) || 'N/A',
       });
 
       setIsProcessing(false);
+      
+      // Navigate to history to see the completed transaction
       router.push('/orderHistory');
     }, 2000);
   };
@@ -90,12 +99,16 @@ export default function PaymentScreen() {
           onPress={handlePay}
           disabled={isProcessing}
         >
-          <Text style={styles.payButtonText}>
-            {isProcessing ? 'Processing...' : `Pay £${total.toFixed(2)}`}
-          </Text>
+          {isProcessing ? (
+            <ActivityIndicator color="#fff" />
+          ) : (
+            <Text style={styles.payButtonText}>
+              Pay £{total.toFixed(2)}
+            </Text>
+          )}
         </Pressable>
 
-        <Pressable onPress={() => router.back()}>
+        <Pressable onPress={() => router.back()} disabled={isProcessing}>
           <Text style={styles.cancelText}>Cancel</Text>
         </Pressable>
       </View>
@@ -133,6 +146,8 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     alignItems: 'center',
     marginTop: 20,
+    minHeight: 60,
+    justifyContent: 'center'
   },
   payButtonText: { color: '#fff', fontSize: 18, fontWeight: '700' },
   disabled: { opacity: 0.6 },
